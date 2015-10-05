@@ -10,33 +10,35 @@ from matplotlib import mlab
 
 # Primeiro importa-se os dados gerados pelo populador.
 def importData():
-    print 'Importando dados...'
     with open('pop.dat', 'rb') as f:
             return pickle.load(f)
 
 # Gera um array de Medias Amostrais com amostras de tamanho igual à meanSize
 def sampleMean(sampleSize, meanSize, populacao):
     sampleMean = []
+    popSize = len(populacao)
 
     for i in range(sampleSize):
         temp = 0
-        for i in range(meanSize):
-            temp += populacao[random.randint(0,1E6 - 1)]
+        for i in range(meanSize): # Somatório de elementos das amostras
+            temp += populacao[random.randint(0, popSize - 1)]
 
-        sampleMean.append(temp/meanSize)
+        sampleMean.append(temp/meanSize) # Média das amostras
 
-    return sampleMean
+    return sampleMean # Médias de todas as amostras
 
 if __name__ == '__main__':
+    print 'Importando dados...'
     populacao = importData()
-    sample = sampleMean(1000, 200, populacao)
+    print 'Calculando médias...'
+    sample = sampleMean(1000, 200, populacao) # 1000 amostras com 200 elementos
 
-    mean = np.mean(sample)
-    std  = np.std(sample)
-    n, bins, patches = plt.hist(sample, color="pink")
-    y = mlab.normpdf(bins, mean, std)
+    mean = np.mean(sample) # Média de todas as amostras
+    std  = np.std(sample) # Desvio padrão
+    n, bins, patches = plt.hist(sample, color="pink") # Histograma das amostras
+    y = mlab.normpdf(bins, mean, std) # Função densidade de probabilidade
 
-    print mean, std
+    print 'Média: '+str(mean), 'Desvio padrão: '+str(std)
 
     plt.plot(bins, y, 'r--')
     plt.xlabel("Media Amostral")
